@@ -94,13 +94,14 @@ async function trainNewModel(newModel_flag, modelWeightsPath, modelWeights, from
     
     const serialized = transaction.serialize()
     console.log(serialized)
+    console.log("TRANSACTION SENT TO BACKEND")
 
     await exonum.send(explorerPath, serialized, 1000, 3000)
     .then((obj) => {console.log(obj); })
     .catch((obj) => { console.log(obj); clearMetadataFile()})
     .finally(() => { can_train = true; })
     // }
-    console.log("TRANSACTION SENT TO BACKEND")
+    console.log("New model ready, can_train = true")
 }
 
 function timeout(s) {
@@ -113,6 +114,8 @@ function randomizeDuration(){
 }
 
 async function main(){
+
+    // console.log(process.argv[2].trim())
 
     await fetchClientKeys()
     .then((client_keys) => {
@@ -128,6 +131,7 @@ async function main(){
             console.log("training is in progress")
         }
         else{
+            console.log("Fetching new updated model from BC!")
             await fetchLatestModelTrainer(TRAINER_KEY.publicKey, MODEL_LENGTH)
             .then(async fetcherResult => {
                 let newModel = fetcherResult[0];

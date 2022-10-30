@@ -97,8 +97,9 @@ var trainNewModel = function () {
                         serialized = transaction.serialize();
 
                         console.log(serialized);
+                        console.log("TRANSACTION SENT TO BACKEND");
 
-                        _context.next = 22;
+                        _context.next = 23;
                         return exonum.send(explorerPath, serialized, 1000, 3000).then(function (obj) {
                             console.log(obj);
                         }).catch(function (obj) {
@@ -107,11 +108,11 @@ var trainNewModel = function () {
                             can_train = true;
                         });
 
-                    case 22:
-                        // }
-                        console.log("TRANSACTION SENT TO BACKEND");
-
                     case 23:
+                        // }
+                        console.log("New model ready, can_train = true");
+
+                    case 24:
                     case 'end':
                         return _context.stop();
                 }
@@ -139,7 +140,7 @@ var main = function () {
 
                     case 2:
                         if (!1) {
-                            _context3.next = 15;
+                            _context3.next = 16;
                             break;
                         }
 
@@ -155,11 +156,12 @@ var main = function () {
                         }
 
                         console.log("training is in progress");
-                        _context3.next = 13;
+                        _context3.next = 14;
                         break;
 
                     case 11:
-                        _context3.next = 13;
+                        console.log("Fetching new updated model from BC!");
+                        _context3.next = 14;
                         return (0, _fetchLatestModel.fetchLatestModelTrainer)(TRAINER_KEY.publicKey, MODEL_LENGTH).then(function () {
                             var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(fetcherResult) {
                                 var newModel, isLocallyCached, firstIteration, newModel_path;
@@ -206,11 +208,11 @@ var main = function () {
                             };
                         }());
 
-                    case 13:
+                    case 14:
                         _context3.next = 2;
                         break;
 
-                    case 15:
+                    case 16:
                     case 'end':
                         return _context3.stop();
                 }
