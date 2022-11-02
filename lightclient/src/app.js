@@ -8,6 +8,7 @@ import { fetchLatestModelTrainer, clearMetadataFile } from './utils/fetchLatestM
 import { store_encoded_vector,  clear_encoded_vector, read_encoded_vector } from './utils/store_encoded_vector'
 import generateNormalNoise from './utils/generateNormalNoise';
 require("regenerator-runtime/runtime");
+require('dotenv').config();
 
 let intervalDuration = 15
 const MODEL_NAME=process.argv[5]
@@ -17,7 +18,8 @@ let model_metadata = fs.readFileSync("./models/"+MODEL_NAME+"/metadata", {encodi
 let MODEL_LENGTH = model_metadata.substring(model_metadata.indexOf('WEIGHTS_LENGTH=') + 1).split("=")[1].split("\n")[0]
 MODEL_LENGTH = parseInt(MODEL_LENGTH)
 
-const BASE_URL = "http://127.0.0.1";
+// const BASE_URL = "http://127.0.0.1";
+const BASE_URL = process.env.HOST;
 const TRANSACTIONS_SERVICE = "/api/explorer/v1/transactions";
 const MODELS_CACHE = "cached_model";
 
@@ -38,8 +40,16 @@ async function trainNewModel(newModel_flag, modelWeightsPath, modelWeights, from
         methodId: SHAREUPDATES_ID,
     })
 
-    let port_number = fetchPortNumber();
-    let explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
+    // let port_number = fetchPortNumber();
+    // let explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
+
+    if (process.env.HOST === "http://127.0.0.1") {
+        var explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
+    }else {
+        var explorerPath = BASE_URL + TRANSACTIONS_SERVICE;
+    }
+
+    
 
     let dataset_directory = fetchDatasetDirectory();
     let noise_scale = fetchImposterState();

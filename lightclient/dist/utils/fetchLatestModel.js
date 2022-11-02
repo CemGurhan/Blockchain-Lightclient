@@ -94,6 +94,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var http = require('http');
 var fs = require('fs');
+require('dotenv').config();
 
 var METADATA_FILE_NAME = 'ModelMetadata';
 // const WEIGHTS_LENGTH = 4010;
@@ -102,15 +103,15 @@ var MODELS_CACHE = "cached_model";
 
 var latest_model_index_fmt = function latest_model_index_fmt() {
     var port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
-    return 'http://127.0.0.1:' + port_number + '/api/services/ml_service/v1/models/latestmodel';
+    return process.env.HOST + '/api/services/ml_service/v1/models/latestmodel';
 };
 var get_model_by_index_fmt = function get_model_by_index_fmt() {
     var port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
-    return 'http://127.0.0.1:' + port_number + '/api/services/ml_service/v1/models/getmodel';
+    return process.env.HOST + '/api/services/ml_service/v1/models/getmodel';
 };
 var get_retrain_quote_fmt = function get_retrain_quote_fmt() {
     var port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
-    return 'http://127.0.0.1:' + port_number + '/api/services/ml_service/v1/trainer/retrain_quota';
+    return process.env.HOST + '/api/services/ml_service/v1/trainer/retrain_quota';
 };
 
 function HTTPGet(endpointURL) {

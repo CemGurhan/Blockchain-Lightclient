@@ -14,7 +14,7 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var trainNewModel = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(newModel_flag, modelWeightsPath, modelWeights, fromLocalCache) {
-        var SERVICE_ID, SHAREUPDATES_ID, ShareUpdates, port_number, explorerPath, dataset_directory, noise_scale, update_gradients, noise, i, newModel, latestValidatorModel, shareUpdatesPayload, transaction, serialized;
+        var SERVICE_ID, SHAREUPDATES_ID, ShareUpdates, explorerPath, dataset_directory, noise_scale, update_gradients, noise, i, newModel, latestValidatorModel, shareUpdatesPayload, transaction, serialized;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -31,8 +31,16 @@ var trainNewModel = function () {
                             serviceId: SERVICE_ID,
                             methodId: SHAREUPDATES_ID
                         });
-                        port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
-                        explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
+
+                        // let port_number = fetchPortNumber();
+                        // let explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
+
+                        if (process.env.HOST === "http://127.0.0.1") {
+                            explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
+                        } else {
+                            explorerPath = BASE_URL + TRANSACTIONS_SERVICE;
+                        }
+
                         dataset_directory = (0, _fetchDatasetDirectory2.default)();
                         noise_scale = (0, _fetchDatasetDirectory.fetchImposterState)();
                         // if (is_imposter){
@@ -53,10 +61,10 @@ var trainNewModel = function () {
 
                         // } else {
 
-                        _context.next = 9;
+                        _context.next = 8;
                         return (0, _fetchPythonWeights2.default)(newModel_flag, dataset_directory, modelWeightsPath, MODEL_NAME, MODEL_LENGTH);
 
-                    case 9:
+                    case 8:
                         update_gradients = _context.sent;
 
 
@@ -99,7 +107,7 @@ var trainNewModel = function () {
                         console.log(serialized);
                         console.log("TRANSACTION SENT TO BACKEND");
 
-                        _context.next = 23;
+                        _context.next = 22;
                         return exonum.send(explorerPath, serialized, 1000, 3000).then(function (obj) {
                             console.log(obj);
                         }).catch(function (obj) {
@@ -108,11 +116,11 @@ var trainNewModel = function () {
                             can_train = true;
                         });
 
-                    case 23:
+                    case 22:
                         // }
                         console.log("New model ready, can_train = true");
 
-                    case 24:
+                    case 23:
                     case 'end':
                         return _context.stop();
                 }
@@ -260,6 +268,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 require("regenerator-runtime/runtime");
 // import getModelLength from './utils/getModelLength';
 
+require('dotenv').config();
 
 var intervalDuration = 15;
 var MODEL_NAME = process.argv[5];
@@ -269,7 +278,8 @@ var model_metadata = fs.readFileSync("./models/" + MODEL_NAME + "/metadata", { e
 var MODEL_LENGTH = model_metadata.substring(model_metadata.indexOf('WEIGHTS_LENGTH=') + 1).split("=")[1].split("\n")[0];
 MODEL_LENGTH = parseInt(MODEL_LENGTH);
 
-var BASE_URL = "http://127.0.0.1";
+// const BASE_URL = "http://127.0.0.1";
+var BASE_URL = process.env.HOST;
 var TRANSACTIONS_SERVICE = "/api/explorer/v1/transactions";
 var MODELS_CACHE = "cached_model";
 

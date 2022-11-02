@@ -1,5 +1,6 @@
 const http = require('http');
 const fs = require('fs');
+require('dotenv').config();
 
 const METADATA_FILE_NAME = 'ModelMetadata';
 // const WEIGHTS_LENGTH = 4010;
@@ -9,15 +10,15 @@ import { store_encoded_vector, read_encoded_vector } from './store_encoded_vecto
 
 const latest_model_index_fmt = () => {
     let port_number = fetchPortNumber();
-    return `http://127.0.0.1:${port_number}/api/services/ml_service/v1/models/latestmodel`
+    return `${process.env.HOST}/api/services/ml_service/v1/models/latestmodel`
 }
 const get_model_by_index_fmt = () => {
     let port_number = fetchPortNumber();
-    return `http://127.0.0.1:${port_number}/api/services/ml_service/v1/models/getmodel`
+    return `${process.env.HOST}/api/services/ml_service/v1/models/getmodel`
 }
 const get_retrain_quote_fmt = () => {
     let port_number = fetchPortNumber();
-    return `http://127.0.0.1:${port_number}/api/services/ml_service/v1/trainer/retrain_quota`
+    return `${process.env.HOST}/api/services/ml_service/v1/trainer/retrain_quota`
 }
 
 function HTTPGet(endpointURL, options = ''){
