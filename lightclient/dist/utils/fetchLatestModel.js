@@ -103,15 +103,30 @@ var MODELS_CACHE = "cached_model";
 
 var latest_model_index_fmt = function latest_model_index_fmt() {
     var port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
-    return process.env.HOST + '/api/services/ml_service/v1/models/latestmodel';
+    if (process.env.HOST === "http://127.0.0.1") {
+        var addressPlace = process.env.HOST + ':' + port_number + '/api/services/ml_service/v1/models/latestmodel';
+    } else {
+        var addressPlace = process.env.HOST + '/api/services/ml_service/v1/models/latestmodel';
+    }
+    return addressPlace;
 };
 var get_model_by_index_fmt = function get_model_by_index_fmt() {
     var port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
-    return process.env.HOST + '/api/services/ml_service/v1/models/getmodel';
+    if (process.env.HOST === "http://127.0.0.1") {
+        var addressPlace = process.env.HOST + ':' + port_number + '/api/services/ml_service/v1/models/getmodel';
+    } else {
+        var addressPlace = process.env.HOST + '/api/services/ml_service/v1/models/getmodel';
+    }
+    return addressPlace;
 };
 var get_retrain_quote_fmt = function get_retrain_quote_fmt() {
     var port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
-    return process.env.HOST + '/api/services/ml_service/v1/trainer/retrain_quota';
+    if (process.env.HOST === "http://127.0.0.1") {
+        var addressPlace = process.env.HOST + ':' + port_number + '/api/services/ml_service/v1/trainer/retrain_quota';
+    } else {
+        var addressPlace = process.env.HOST + '/api/services/ml_service/v1/trainer/retrain_quota';
+    }
+    return addressPlace;
 };
 
 function HTTPGet(endpointURL) {

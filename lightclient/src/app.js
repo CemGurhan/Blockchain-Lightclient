@@ -40,7 +40,7 @@ async function trainNewModel(newModel_flag, modelWeightsPath, modelWeights, from
         methodId: SHAREUPDATES_ID,
     })
 
-    // let port_number = fetchPortNumber();
+    let port_number = fetchPortNumber();
     // let explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
 
     if (process.env.HOST === "http://127.0.0.1") {

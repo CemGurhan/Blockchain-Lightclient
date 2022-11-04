@@ -8,17 +8,34 @@ const MODELS_CACHE = "cached_model";
 import {fetchPortNumber} from './fetchDatasetDirectory';
 import { store_encoded_vector, read_encoded_vector } from './store_encoded_vector';
 
+
+
 const latest_model_index_fmt = () => {
     let port_number = fetchPortNumber();
-    return `${process.env.HOST}/api/services/ml_service/v1/models/latestmodel`
+    if (process.env.HOST === "http://127.0.0.1") {
+        var addressPlace = `${process.env.HOST}:${port_number}/api/services/ml_service/v1/models/latestmodel`
+    } else {
+        var addressPlace = `${process.env.HOST}/api/services/ml_service/v1/models/latestmodel`
+    }
+    return addressPlace
 }
 const get_model_by_index_fmt = () => {
     let port_number = fetchPortNumber();
-    return `${process.env.HOST}/api/services/ml_service/v1/models/getmodel`
+    if (process.env.HOST === "http://127.0.0.1") {
+        var addressPlace = `${process.env.HOST}:${port_number}/api/services/ml_service/v1/models/getmodel`
+    } else {
+        var addressPlace = `${process.env.HOST}/api/services/ml_service/v1/models/getmodel`
+    }
+    return addressPlace
 }
 const get_retrain_quote_fmt = () => {
     let port_number = fetchPortNumber();
-    return `${process.env.HOST}/api/services/ml_service/v1/trainer/retrain_quota`
+    if (process.env.HOST === "http://127.0.0.1") {
+        var addressPlace = `${process.env.HOST}:${port_number}/api/services/ml_service/v1/trainer/retrain_quota`
+    } else {
+        var addressPlace = `${process.env.HOST}/api/services/ml_service/v1/trainer/retrain_quota`
+    }
+    return addressPlace
 }
 
 function HTTPGet(endpointURL, options = ''){

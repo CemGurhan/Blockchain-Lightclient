@@ -14,7 +14,7 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var trainNewModel = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(newModel_flag, modelWeightsPath, modelWeights, fromLocalCache) {
-        var SERVICE_ID, SHAREUPDATES_ID, ShareUpdates, explorerPath, dataset_directory, noise_scale, update_gradients, noise, i, newModel, latestValidatorModel, shareUpdatesPayload, transaction, serialized;
+        var SERVICE_ID, SHAREUPDATES_ID, ShareUpdates, port_number, explorerPath, dataset_directory, noise_scale, update_gradients, noise, i, newModel, latestValidatorModel, shareUpdatesPayload, transaction, serialized;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -31,8 +31,7 @@ var trainNewModel = function () {
                             serviceId: SERVICE_ID,
                             methodId: SHAREUPDATES_ID
                         });
-
-                        // let port_number = fetchPortNumber();
+                        port_number = (0, _fetchDatasetDirectory.fetchPortNumber)();
                         // let explorerPath = BASE_URL + ":" + port_number + TRANSACTIONS_SERVICE;
 
                         if (process.env.HOST === "http://127.0.0.1") {
@@ -61,10 +60,10 @@ var trainNewModel = function () {
 
                         // } else {
 
-                        _context.next = 8;
+                        _context.next = 9;
                         return (0, _fetchPythonWeights2.default)(newModel_flag, dataset_directory, modelWeightsPath, MODEL_NAME, MODEL_LENGTH);
 
-                    case 8:
+                    case 9:
                         update_gradients = _context.sent;
 
 
@@ -107,7 +106,7 @@ var trainNewModel = function () {
                         console.log(serialized);
                         console.log("TRANSACTION SENT TO BACKEND");
 
-                        _context.next = 22;
+                        _context.next = 23;
                         return exonum.send(explorerPath, serialized, 1000, 3000).then(function (obj) {
                             console.log(obj);
                         }).catch(function (obj) {
@@ -116,11 +115,11 @@ var trainNewModel = function () {
                             can_train = true;
                         });
 
-                    case 22:
+                    case 23:
                         // }
                         console.log("New model ready, can_train = true");
 
-                    case 23:
+                    case 24:
                     case 'end':
                         return _context.stop();
                 }
