@@ -10,6 +10,7 @@ import generateNormalNoise from './utils/generateNormalNoise';
 require("regenerator-runtime/runtime");
 require('dotenv').config();
 
+console.log(`PROCESS: ${process.argv}`)
 let intervalDuration = 15
 const MODEL_NAME=process.argv[5]
 const fs = require("fs");

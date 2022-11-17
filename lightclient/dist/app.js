@@ -269,6 +269,7 @@ require("regenerator-runtime/runtime");
 
 require('dotenv').config();
 
+console.log('PROCESS: ' + process.argv);
 var intervalDuration = 15;
 var MODEL_NAME = process.argv[5];
 var fs = require("fs");
