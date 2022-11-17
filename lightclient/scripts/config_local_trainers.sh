@@ -9,8 +9,13 @@ while getopts "p:n:" arg; do
     esac
 done
 
-for i in $(seq 0 $(($number_of_trainers - 1))); do 
-    echo "starting lightlicent $((i+1))"
+npm start -- $port models/MNIST28X28/data.csv 0.1 MNIST28X28
+
+for ((i=1;i<$number_of_trainers;i++))
+do
     source ./scripts/utils/newTab.sh
-    newtab eval "cd $PWD; npm start -- $port models/MNIST28X28/data.csv 0.1 MNIST28X28"
+    newtab eval "cd $PWD; sh ./scripts/lightclient_copy_run.sh $i $port" 
 done
+
+# n = 2 doesnt work
+
