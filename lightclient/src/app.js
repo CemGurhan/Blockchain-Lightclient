@@ -152,6 +152,9 @@ async function main(){
                     if (can_train){
                         can_train = false;
                         let newModel_path = store_encoded_vector(newModel);
+                        console.log("NEW MODEL: ", newModel)
+                        console.log("IS LOCALLY CACHED: ", isLocallyCached)
+                        console.log("FIRST ITERATION: ", firstIteration)
                         await trainNewModel(firstIteration, newModel_path, newModel, isLocallyCached)
                     }
                 }

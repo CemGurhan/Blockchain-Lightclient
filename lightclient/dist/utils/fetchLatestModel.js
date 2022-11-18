@@ -28,7 +28,8 @@ var fetchLatestModelTrainer = exports.fetchLatestModelTrainer = function () {
                             .then(function (latestIndex) {
                                 readMetadataFile().then(function (fileContent) {
                                     if (latestIndex > fileContent) {
-                                        //if there is a new model (relative to the latest model this LC trained on )
+                                        console.log("LATEST INDEX: ", latestIndex);
+                                        console.log("FILE CONTENT: ", fileContent); //if there is a new model (relative to the latest model this LC trained on )
                                         console.log("New model released by the validator!, #" + latestIndex + "...Hello from lightclient/src/utils/fetchLatestmodel.js/fethclatestmodeltrainer");
                                         if ([0, -1].includes(latestIndex)) {
                                             //new model 
@@ -56,6 +57,8 @@ var fetchLatestModelTrainer = exports.fetchLatestModelTrainer = function () {
                                             });
                                         }
                                     } else {
+                                        console.log("LATEST INDEX: ", latestIndex);
+                                        console.log("FILE CONTENT: ", fileContent);
                                         getRetrainQuote(trainerKey).then(function (retrainQuota) {
                                             if (retrainQuota > 0) {
                                                 console.log("Will retrain on the locally cached model");

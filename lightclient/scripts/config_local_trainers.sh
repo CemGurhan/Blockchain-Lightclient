@@ -1,4 +1,4 @@
-rm -rf ModelMetadata
+rm ModelMetadata
 port=9000
 number_of_trainers=1
 
@@ -20,9 +20,15 @@ openTab eval "echo 'Welcome to the DataNET local tester. You are running $number
 
 for ((i=0;i<$number_of_trainers;i++))
 do
-    source ./scripts/utils/newTab.sh
-    newtab eval "cd $PWD; npm start -- $port models/MNIST28X28/data.csv 0.1 MNIST28X28" 
+    if [[ $i == 0 ]]
+    then
+        source ./scripts/utils/newTab.sh
+        newtab eval "cd $PWD; npm start -- $port models/MNIST28X28/data.csv 0.1 MNIST28X28" 
+    else
+        source ./scripts/utils/newTab.sh
+        newtab eval "cd $PWD$i; npm start -- $port models/MNIST28X28/data.csv 0.1 MNIST28X28"
+    fi
+
 done
 
-# n = 2 doesnt work
 

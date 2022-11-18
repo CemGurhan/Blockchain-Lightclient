@@ -181,28 +181,32 @@ var main = function () {
                                                 firstIteration = fetcherResult[2];
 
                                                 if (!(newModel !== -1)) {
-                                                    _context2.next = 11;
+                                                    _context2.next = 14;
                                                     break;
                                                 }
 
                                                 if (!can_train) {
-                                                    _context2.next = 9;
+                                                    _context2.next = 12;
                                                     break;
                                                 }
 
                                                 can_train = false;
                                                 newModel_path = (0, _store_encoded_vector.store_encoded_vector)(newModel);
-                                                _context2.next = 9;
+
+                                                console.log("NEW MODEL: ", newModel);
+                                                console.log("IS LOCALLY CACHED: ", isLocallyCached);
+                                                console.log("FIRST ITERATION: ", firstIteration);
+                                                _context2.next = 12;
                                                 return trainNewModel(firstIteration, newModel_path, newModel, isLocallyCached);
 
-                                            case 9:
-                                                _context2.next = 12;
+                                            case 12:
+                                                _context2.next = 15;
                                                 break;
 
-                                            case 11:
+                                            case 14:
                                                 console.log("No retrain quota at the moment, will retry in a bit");
 
-                                            case 12:
+                                            case 15:
                                             case 'end':
                                                 return _context2.stop();
                                         }
