@@ -27,6 +27,8 @@ do
     then
         ttab -w npm start -- $port models/MNIST28X28/data.csv $trainer_noise $model_name 
     else
+        cd ..
+        cd lightclient$i
         ttab -w npm start -- $port models/MNIST28X28/data.csv $trainer_noise $model_name
     fi
 
