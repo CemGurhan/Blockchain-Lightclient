@@ -71,7 +71,7 @@ def flattenWeights(model):
 # %%
 def trainModel(model, data_train, label_train):
     batch_size = 100
-    indices = np.random.randint(0, high=len(data_train), size=batch_size) # find 10 (batch_size) random indices from the training set
+    indices = np.random.randint(0, high=len(data_train), size=batch_size) # find 100 (batch_size) random indices from the training set
     model.fit(data_train[indices], label_train[indices], epochs=1, verbose=1) # find the values at those indices (rows) and make that our training data
     return model
 
