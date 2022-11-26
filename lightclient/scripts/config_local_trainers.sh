@@ -47,6 +47,13 @@ then
 
 fi
 
+echo "calling data reciever service"
+data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" 0.0.0.0:8000/dataFilledConfirm)"
+while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
+do
+    data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" 0.0.0.0:8000/dataFilledConfirm)"
+done
+
 for ((i=0;i<$number_of_trainers;i++))
 do
     if [[ $i == 0 ]]
