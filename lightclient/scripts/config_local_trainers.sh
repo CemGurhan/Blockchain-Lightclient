@@ -67,4 +67,5 @@ do
 
 done
 
+# TODO add wait period for validators to have been spun up before running lightclients 
 
