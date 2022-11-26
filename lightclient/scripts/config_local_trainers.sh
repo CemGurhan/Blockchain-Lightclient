@@ -23,7 +23,7 @@ done
 
 python scripts/sort_data.py -n 1
 
-if [[ isMainTest -ne 0 ]]
+if [[ isMainTest != 0 ]]
 then
     for ((i=0;i<$number_of_trainers;i++))
     do
@@ -34,7 +34,10 @@ then
              do
                 pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" 0.0.0.0:8000/postData/$i)"
              done
+             continue
         fi
+        cd ..
+        cd lightclient$i
         pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" 0.0.0.0:8000/postData/$i)"
         while [[ pub_key_response_header -eq 000 ]] 
         do
