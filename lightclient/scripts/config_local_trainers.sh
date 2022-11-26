@@ -54,6 +54,13 @@ do
     data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" 0.0.0.0:8000/dataFilledConfirm)"
 done
 
+echo "calling lead validator"
+validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
+while [[ validation_run_check_header -ne 200 ]]
+do
+    validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
+done
+
 for ((i=0;i<$number_of_trainers;i++))
 do
     if [[ $i == 0 ]]
