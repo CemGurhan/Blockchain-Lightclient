@@ -29,7 +29,6 @@ def send_to_node(newModel_flag, initial_model, update_vector):
 def read_input(index):
     if len(sys.argv) < (index+1):
         raise Exception('No dataset path found')
-
     df = pd.read_csv(sys.argv[index])
     # df = pd.read_csv("data.csv")
     if len(df) == 0:
