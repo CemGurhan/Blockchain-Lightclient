@@ -14,7 +14,7 @@ remove-ten:
 	@rm -rf ../lightclient9
 .PHONY:remove-ten
 
-remove-data: remove-ten
+remove-data: 
 	rm -f models/MNIST28X28/data_old.csv \
 	rm -f models/MNIST28X28/data.csv 
 .PHONY:remove-data
