@@ -5,15 +5,16 @@ trainer_noise=0.1
 model_name="MNIST28X28"
 isMainTest=0
 
-while getopts "p:n:tn:m:t:" arg; do
+while getopts "p:n:s:m:t:" arg; do
     case $arg in
     p) port=$(($OPTARG)) ;;
     n) number_of_trainers=$(($OPTARG)) ;;
-    tn) trainer_noise=$(($OPTARG)) ;;
+    s) trainer_noise=$(($OPTARG)) ;;
     m) model_name="$OPTARG" ;;
     t) isMainTest=$(($OPTARG)) ;;
     esac
 done
+
 
 for ((i=1;i<$number_of_trainers;i++))
 do
@@ -26,7 +27,6 @@ python scripts/create_test_data.py
 
 if [[ isMainTest -ne 0 ]]
 then
-    echo "HELLO FROM INSIDE"
     for ((i=0;i<$number_of_trainers;i++))
     do
         if [[ $i == 0 ]]
@@ -43,8 +43,8 @@ then
         pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" 0.0.0.0:8000/postData/$i)"
         while [[ pub_key_response_header -eq 000 ]] 
         do
-                pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" 0.0.0.0:8000/postData/$i)"
-             done
+            pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" 0.0.0.0:8000/postData/$i)"
+        done
     done
 
     echo "calling data reciever service"
@@ -76,5 +76,4 @@ do
 
 done
 
-# TODO add wait period for validators to have been spun up before running lightclients 
 
