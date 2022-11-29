@@ -55,10 +55,10 @@ then
     done
 
     echo "calling lead validator"
-    validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/sync/slack_ratio)"
+    validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
     while [[ validation_run_check_header -ne 200 ]]
     do
-        validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/sync/slack_ratio)"
+        validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
     done
 
 fi
@@ -67,6 +67,8 @@ for ((i=0;i<$number_of_trainers;i++))
 do
     if [[ $i == 0 ]]
     then
+        cd ..
+        cd lightclient
         ttab -w npm start -- $port models/MNIST28X28/data.csv $trainer_noise $model_name 
     else
         cd ..
@@ -75,5 +77,4 @@ do
     fi
 
 done
-
 

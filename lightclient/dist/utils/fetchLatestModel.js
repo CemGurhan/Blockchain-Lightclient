@@ -38,6 +38,7 @@ var fetchLatestModelTrainer = exports.fetchLatestModelTrainer = function () {
                                                 return Math.random() * 0.2 - 0.1;
                                             });
                                             (0, _store_encoded_vector.store_encoded_vector)(randArr, 'validator');
+                                            console.log("WRITING TO METADATA FILE");
                                             writeToMetadataFile(0) //update metadata file to indicate working on an empty model 
                                             .then(function () {
                                                 resolve([randArr, 0, 1]);
@@ -48,6 +49,7 @@ var fetchLatestModelTrainer = exports.fetchLatestModelTrainer = function () {
                                             getModelByIndex(latestIndex) //fetch latest model weights
                                             .then(function (latestModelWeights) {
                                                 (0, _store_encoded_vector.store_encoded_vector)(latestModelWeights, 'validator');
+                                                console.log("WRITING TO METADATA FILE");
                                                 writeToMetadataFile(latestIndex) //update metadata file
                                                 .then(function () {
                                                     resolve([latestModelWeights, 0, 0]);

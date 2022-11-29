@@ -144,6 +144,7 @@ export async function fetchLatestModelTrainer(trainerKey, WEIGHTS_LENGTH){
                             return Math.random() * 0.2 - 0.1;
                         });
                         store_encoded_vector(randArr, 'validator');
+                        console.log("WRITING TO METADATA FILE")
                         writeToMetadataFile(0)          //update metadata file to indicate working on an empty model 
                         .then(() => {
                             resolve([randArr, 0, 1]);
@@ -154,6 +155,7 @@ export async function fetchLatestModelTrainer(trainerKey, WEIGHTS_LENGTH){
                         getModelByIndex(latestIndex)    //fetch latest model weights
                         .then(latestModelWeights => {
                             store_encoded_vector(latestModelWeights, 'validator');
+                            console.log("WRITING TO METADATA FILE")
                             writeToMetadataFile(latestIndex)    //update metadata file
                             .then(() => {
                                 resolve([latestModelWeights, 0, 0])
