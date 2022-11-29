@@ -15,14 +15,14 @@ while getopts "p:n:tn:m:t:" arg; do
     esac
 done
 
-python scripts/create_test_data.py
-
 for ((i=1;i<$number_of_trainers;i++))
 do
     sh ./scripts/lightclient_copy.sh $i $port
 done
 
 python scripts/sort_data.py -n 1
+
+python scripts/create_test_data.py
 
 if [[ isMainTest != 0 ]]
 then
