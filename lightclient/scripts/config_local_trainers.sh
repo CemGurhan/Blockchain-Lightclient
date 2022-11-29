@@ -15,6 +15,7 @@ while getopts "p:n:tn:m:t:" arg; do
     esac
 done
 
+python scripts/create_test_data.py
 
 for ((i=1;i<$number_of_trainers;i++))
 do
