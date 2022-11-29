@@ -26,3 +26,7 @@ set-data: remove-data
 ten:
 	sh scripts/config_local_trainers.sh -n 10 -t 1
 .PHONY: ten
+
+n-ten:
+	sh scripts/config_local_trainers.sh -n 10 
+.PHONY: n-ten

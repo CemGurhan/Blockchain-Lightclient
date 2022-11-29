@@ -24,8 +24,9 @@ python scripts/sort_data.py -n 1
 
 python scripts/create_test_data.py
 
-if [[ isMainTest != 0 ]]
+if [[ isMainTest -ne 0 ]]
 then
+    echo "HELLO FROM INSIDE"
     for ((i=0;i<$number_of_trainers;i++))
     do
         if [[ $i == 0 ]]
@@ -46,21 +47,21 @@ then
              done
     done
 
-fi
-
-echo "calling data reciever service"
-data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" 0.0.0.0:8000/dataFilledConfirm)"
-while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
-do
+    echo "calling data reciever service"
     data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" 0.0.0.0:8000/dataFilledConfirm)"
-done
+    while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
+    do
+        data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" 0.0.0.0:8000/dataFilledConfirm)"
+    done
 
-echo "calling lead validator"
-validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
-while [[ validation_run_check_header -ne 200 ]]
-do
-    validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
-done
+    echo "calling lead validator"
+    validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/sync/slack_ratio)"
+    while [[ validation_run_check_header -ne 200 ]]
+    do
+        validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/sync/slack_ratio)"
+    done
+
+fi
 
 for ((i=0;i<$number_of_trainers;i++))
 do
