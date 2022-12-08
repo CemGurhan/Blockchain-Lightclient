@@ -20,7 +20,7 @@ INPUT_SHAPE = (28, 28, 1)
 
 def reshapeData(index):
     df = read_input(index)
-    df = df.sample(int(0.3*len(df)))
+    # df = df.sample(int(0.3*len(df)))
     label = df.iloc[:, 0]
     label = label.to_numpy()
     df = df.drop(df.columns[0], axis=1)
