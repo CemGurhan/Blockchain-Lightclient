@@ -25,6 +25,7 @@ python scripts/sort_data.py -n 1
 
 python scripts/create_test_data.py
 
+
 if [[ isMainTest -ne 0 ]]
 then
     for ((i=0;i<$number_of_trainers;i++))
