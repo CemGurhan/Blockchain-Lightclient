@@ -75,6 +75,11 @@ def trainModel(model, data_train, label_train):
     return model
 
 # %%
+# def trainModel(model, data_train, label_train):
+#     model.fit(data_train, label_train, epochs=1, verbose=1)
+#     return model
+
+# %%
 def rebuildModel(new_model, list):
     # if (newModel_flag):
     #     list = []
