@@ -18,16 +18,15 @@ done
 
 for ((i=1;i<$number_of_trainers;i++))
 do
-    sh ./scripts/lightclient_copy.sh $i $port
+    sh ./scripts/lightclient_copy.sh $i $port $isMainTest
 done
-
-python scripts/sort_data.py -n 1
-
-python scripts/create_test_data.py
-
 
 if [[ isMainTest -ne 0 ]]
 then
+    python scripts/sort_data.py -n 1
+
+    python scripts/create_test_data.py
+
     for ((i=0;i<$number_of_trainers;i++))
     do
         if [[ $i == 0 ]]
