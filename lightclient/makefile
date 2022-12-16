@@ -30,3 +30,4 @@ ten:
 n-ten:
 	sh scripts/config_local_trainers.sh -n 10 
 .PHONY: n-ten
+
