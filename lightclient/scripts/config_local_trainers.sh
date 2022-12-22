@@ -32,7 +32,7 @@ then
     do
         if [[ $i == 0 ]]
         then
-            for ((j=0;j<$validator_data_reciever_service_addresses;j++))
+            for ((j=0;j<${#validator_data_reciever_service_addresses[@]};j++))
             do
                 echo "sending test data from lightclient 1 to validator data reciever service running at ${validator_data_reciever_service_addresses[j]}"
                 pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" ${validator_data_reciever_service_addresses[j]}/postData/$i)"
@@ -40,12 +40,12 @@ then
                 do
                     pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" ${validator_data_reciever_service_addresses[j]}/postData/$i)"
                 done
-                continue
             done
+            continue
         fi
         cd ..
         cd lightclient$i
-        for ((j=0;j<$validator_data_reciever_service_addresses;j++))
+        for ((j=0;j<${#validator_data_reciever_service_addresses[@]};j++))
         do
             echo "sending test data from lightclient $((i+1)) to validator data reciever service running at ${validator_data_reciever_service_addresses[j]}"
             pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" ${validator_data_reciever_service_addresses[j]}/postData/$i)"
@@ -56,9 +56,9 @@ then
         done
     done
 
-    for ((i=0;i<$validator_data_reciever_service_addresses;i++))
+    for ((i=0;i<${#validator_data_reciever_service_addresses[@]};i++))
     do
-        echo "calling data reciever service running at ${validator_data_reciever_service_addresses[i]}"
+        echo "calling data reciever service running at ${validator_data_reciever_service_addresses[i]} to verify test data has been saved for this valdiator"
         data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm)"
         while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
         do
