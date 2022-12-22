@@ -56,13 +56,17 @@ then
         done
     done
 
+
     for ((i=0;i<${#validator_data_reciever_service_addresses[@]};i++))
     do
-        echo "calling data reciever service running at ${validator_data_reciever_service_addresses[i]} to verify test data has been saved for this valdiator"
-        data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm)"
-        while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
+        for ((j=0;j<$number_of_trainers;j++))
         do
-            data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm)"
+            echo "calling data reciever service running at ${validator_data_reciever_service_addresses[i]} to verify that test data sent from ligthclient $((j+1)) has been saved for this valdiator"
+            data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm/$j)"
+            while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
+            do
+                data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm/$j)"
+            done
         done
     done
 
