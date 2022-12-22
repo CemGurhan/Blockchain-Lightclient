@@ -4,14 +4,18 @@ number_of_trainers=1
 trainer_noise=0.1
 model_name="MNIST28X28"
 is_non_iid=0
+validator_data_reciever_port=8080
+number_of_validators=1
 
-while getopts "p:n:s:m:t:" arg; do
+while getopts "p:n:s:m:t:d:v:" arg; do
     case $arg in
     p) port=$(($OPTARG)) ;;
     n) number_of_trainers=$(($OPTARG)) ;;
     s) trainer_noise=$(($OPTARG)) ;;
     m) model_name="$OPTARG" ;;
     t) is_non_iid=$(($OPTARG)) ;;
+    d) validator_data_reciever_port=$(($OPTARG)) ;;
+    v) number_of_validators=$(($OPTARG)) ;;
     esac
 done
 
@@ -31,6 +35,7 @@ then
     do
         if [[ $i == 0 ]]
         then
+             echo "sending test data from lightclient 1 to validator data reciever service running at $validator_data_reciever_port"
              pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" 0.0.0.0:8000/postData/$i)"
              while [[ pub_key_response_header -eq 000 ]] 
              do
