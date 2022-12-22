@@ -1,3 +1,8 @@
+""" README
+Creates test data from current validators training data
+"""
+
+
 import random
 
 all_data = []

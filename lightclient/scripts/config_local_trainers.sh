@@ -3,7 +3,7 @@ port=9000
 number_of_trainers=1
 trainer_noise=0.1
 model_name="MNIST28X28"
-isMainTest=0
+is_non_iid=0
 
 while getopts "p:n:s:m:t:" arg; do
     case $arg in
@@ -11,17 +11,17 @@ while getopts "p:n:s:m:t:" arg; do
     n) number_of_trainers=$(($OPTARG)) ;;
     s) trainer_noise=$(($OPTARG)) ;;
     m) model_name="$OPTARG" ;;
-    t) isMainTest=$(($OPTARG)) ;;
+    t) is_non_iid=$(($OPTARG)) ;;
     esac
 done
 
 
 for ((i=1;i<$number_of_trainers;i++))
 do
-    sh ./scripts/lightclient_copy.sh $i $port $isMainTest
+    sh ./scripts/lightclient_copy.sh $i $port $is_non_iid
 done
 
-if [[ isMainTest -ne 0 ]]
+if [[ is_non_iid -ne 0 ]]
 then
     python scripts/sort_data.py -n 1
 
