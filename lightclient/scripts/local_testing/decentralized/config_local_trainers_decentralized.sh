@@ -85,11 +85,11 @@ do
     then
         cd ..
         cd lightclient
-        ttab -w npm start -- $port models/MNIST28X28/data.csv $trainer_noise $model_name 
+        ttab -w npm start -- $port models/MNIST28X28/data.csv $trainer_noise $model_name # should port be dynamic here?
     else
         cd ..
         cd lightclient$i
-        ttab -w npm start -- $port models/MNIST28X28/data.csv $trainer_noise $model_name
+        ttab -w npm start -- $port models/MNIST28X28/data.csv $trainer_noise $model_name # should port be dynamic here?
     fi
 
 done

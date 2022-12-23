@@ -1,24 +1,24 @@
 rm ModelMetadata
 port=9000
-number_of_trainers=1
 trainer_noise=0.1
 model_name="MNIST28X28"
 is_non_iid=0
+lightclient_number=0
 
-while getopts "p:n:s:m:t:d:" arg; do
+while getopts "p:s:m:t:d:l:" arg; do
     case $arg in
     p) port=$(($OPTARG)) ;;
-    n) number_of_trainers=$(($OPTARG)) ;;
     s) trainer_noise=$(($OPTARG)) ;;
     m) model_name="$OPTARG" ;;
     t) is_non_iid=$(($OPTARG)) ;;
     d) validator_data_reciever_service_addresses+=("$OPTARG");;
+    l) lightclient_number=$(($OPTARG)) ;;
     esac
 done
 
 if [[ is_non_iid -ne 0 ]]
 then
-    python scripts/python_scripts/sort_data.py -n 1
+    python scripts/python_scripts/sort_data.py -n $(($lightclient_number+1))
 
     python scripts/python_scripts/create_test_data.py
 
@@ -26,10 +26,10 @@ then
     for ((j=0;j<${#validator_data_reciever_service_addresses[@]};j++))
     do
         echo "sending test data from lightclient to validator data reciever service running at ${validator_data_reciever_service_addresses[j]}"
-        pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" ${validator_data_reciever_service_addresses[j]}/postData/$i)"
+        pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" ${validator_data_reciever_service_addresses[j]}/postData/$lightclient_number)"
         while [[ pub_key_response_header -ne 200 ]] 
         do
-            pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" ${validator_data_reciever_service_addresses[j]}/postData/$i)"
+            pub_key_response_header="$(curl -X POST --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" --data-binary "@./test_data/test_data.csv" ${validator_data_reciever_service_addresses[j]}/postData/$lightclient_number)"
         done
     done
         
@@ -37,14 +37,11 @@ then
 
     for ((i=0;i<${#validator_data_reciever_service_addresses[@]};i++))
     do
-        for ((j=0;j<$number_of_trainers;j++))
+        echo "calling data reciever service running at ${validator_data_reciever_service_addresses[i]} to verify that test data sent from ligthclient $((j+1)) has been saved for this valdiator"
+        data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm/$lightclient_number)"
+        while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
         do
-            echo "calling data reciever service running at ${validator_data_reciever_service_addresses[i]} to verify that test data sent from ligthclient $((j+1)) has been saved for this valdiator"
-            data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm/$j)"
-            while [[ data_fill_check_header -eq 500 ]] || [[ data_fill_check_header -eq 000 ]]
-            do
-                data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm/$j)"
-            done
+            data_fill_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" ${validator_data_reciever_service_addresses[i]}/dataFilledConfirm/$lightclient_number)"
         done
     done
 
