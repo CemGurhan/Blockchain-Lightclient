@@ -45,7 +45,7 @@ then
         done
     done
 
-    echo "calling lead validator"
+    echo "calling lead validator" # add a call to see if all validators on the network are ready instead of 1
     validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
     while [[ validation_run_check_header -ne 200 ]]
     do
