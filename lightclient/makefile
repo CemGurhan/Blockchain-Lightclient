@@ -24,10 +24,10 @@ set-data: remove-data
 .PHONY:set-data
 
 n-ten:
-	sh scripts/local_testing/decentralized/config_local_trainers.sh -n 10 -t 1
+	sh scripts/local_testing/decentralized/config_local_trainers_d.sh -n 10 -t 1
 .PHONY: n-ten
 
 ten:
-	sh scripts/local_testing/decentralized/config_local_trainers.sh -n 10 
+	sh scripts/local_testing/decentralized/config_local_trainers_d.sh -n 10 
 .PHONY: ten
 
