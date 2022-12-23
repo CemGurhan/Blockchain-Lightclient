@@ -5,7 +5,7 @@ model_name="MNIST28X28"
 is_non_iid=0
 lightclient_number=0
 
-while getopts "p:s:m:t:d:l:" arg; do
+while getopts "p:s:m:t:d:l:v:" arg; do
     case $arg in
     p) port=$(($OPTARG)) ;;
     s) trainer_noise=$(($OPTARG)) ;;
@@ -13,6 +13,7 @@ while getopts "p:s:m:t:d:l:" arg; do
     t) is_non_iid=$(($OPTARG)) ;;
     d) validator_data_reciever_service_addresses+=("$OPTARG");;
     l) lightclient_number=$(($OPTARG)) ;;
+    v) validator_public_addresses+=("$OPTARG");;
     esac
 done
 
@@ -45,11 +46,14 @@ then
         done
     done
 
-    echo "calling lead validator" # add a call to see if all validators on the network are ready instead of 1
-    validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
-    while [[ validation_run_check_header -ne 200 ]]
+    echo "calling all validators for readiness check"
+    for ((i=0;i<${#validator_public_addresses[@]};i++))
     do
-        validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:9000/api/services/ml_service/v1/models/latestmodel)"
+        validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://${validator_public_addresses[i]}/api/services/ml_service/v1/models/latestmodel)"
+        while [[ validation_run_check_header -ne 200 ]]
+        do
+            validation_run_check_header="$(curl --connect-timeout 5 -o /dev/null -s -w "%{http_code}\n" http://${validator_public_addresses[i]}/api/services/ml_service/v1/models/latestmodel)"
+        done
     done
 
 fi
