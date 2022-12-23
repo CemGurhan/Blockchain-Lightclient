@@ -19,14 +19,14 @@ done
 
 for ((i=1;i<$number_of_trainers;i++))
 do
-    sh ./scripts/lightclient_copy.sh $i $port $is_non_iid
+    sh ./scripts/local_testing/lightclient_copy.sh $i $port $is_non_iid
 done
 
 if [[ is_non_iid -ne 0 ]]
 then
-    python scripts/sort_data.py -n 1
+    python scripts/python_scripts/sort_data.py -n 1
 
-    python scripts/create_test_data.py
+    python scripts/python_scripts/create_test_data.py
 
     for ((i=0;i<$number_of_trainers;i++))
     do
